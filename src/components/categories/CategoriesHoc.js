@@ -1,21 +1,22 @@
 import axios from "axios";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { addCategoriesActionCreator } from "../../redux/categoriesReducer";
+import { useContext, useEffect } from "react";
+import { MyContext } from "../../App";
 
-function categoriesHoc(Component) {
-  return () => {
-    const dispatch = useDispatch();
-    const categories = useSelector((state) => state.categories.categories);
+const categoriesHoc = (CategoriesComponent) => {
+  return (props) => {
+    const categories = useContext(MyContext).state.categories;
+    const dispatch = useContext(MyContext).dispatch;
+
     useEffect(() => {
-      axios
-        .get("https://api.thecatapi.com/v1/categories")
-        .then((response) =>
-          dispatch(addCategoriesActionCreator(response.data))
-        );
-    }, []);
-    return <Component categories={categories} />;
-  };
-}
+      axios.get("https://api.thecatapi.com/v1/categories").then((response) => {
+        dispatch({
+          type: "SET_CATEGORIES",
+          payload: response.data,
+        });
+      });
+    }, [dispatch]);
 
+    return <CategoriesComponent {...props} {...{ categories }} />;
+  };
+};
 export default categoriesHoc;
