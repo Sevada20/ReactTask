@@ -1,48 +1,18 @@
-import axios from "axios";
-import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { MyContext } from "../../App";
+import photosHoc from "./photosHoc";
 import PhotoCat from "./PhotoCat";
+import { memo, useMemo } from "react";
+import "./PhotosCats.css";
+const PhotosCats = ({ addPhotosCats, photosCats }) => {
+  const memoizedPhotosCats = useMemo(() => {
+    return photosCats.map((photo) => <PhotoCat key={photo.id} photo={photo} />);
+  }, [photosCats]);
 
-const PhotosCats = () => {
-  const photosCats = useContext(MyContext).state.photoCats;
-  const dispatch = useContext(MyContext).dispatch;
-  const [limit, setLimit] = useState(0);
-  const params = useParams();
-
-  useEffect(() => {
-    axios
-      .get(
-        `https://api.thecatapi.com/v1/images/search?limit=10&page=${limit}&category_ids=${params.id}`
-      )
-      .then((response) => {
-        dispatch({
-          type: "SET_PHOTOS",
-          photosCats: response.data,
-        });
-      });
-  }, [dispatch, limit, params.id]);
-
-  function addPhotosCats() {
-    axios
-      .get(
-        `https://api.thecatapi.com/v1/images/search?limit=10&page=${limit}&category_ids=${params.id}`
-      )
-      .then((response) => {
-        dispatch({
-          type: "ADD_PHOTOS",
-          photosCats: response.data,
-        });
-      });
-  }
   return (
-    <div>
-      {photosCats.map((photo) => (
-        <PhotoCat photo={photo} />
-      ))}
+    <div className="photosContainer">
+      {memoizedPhotosCats}
       <button onClick={addPhotosCats}>more</button>
     </div>
   );
 };
 
-export default PhotosCats;
+export default photosHoc(memo(PhotosCats));

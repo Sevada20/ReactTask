@@ -1,6 +1,7 @@
 .App {
   font-size: calc(10px + 2vmin);
   background-color: teal;
+  display: flex;
 }
 
 .App a {
@@ -10,8 +11,5 @@
 img {
   width: 250px;
   height: 150px;
-}
-
-.App {
-  display: flex;
+  margin: 10px;
 }

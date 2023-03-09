@@ -8,6 +8,7 @@ const categoriesHoc = (CategoriesComponent) => {
     const dispatch = useContext(MyContext).dispatch;
 
     useEffect(() => {
+      console.log("render categoriesHoc");
       axios.get("https://api.thecatapi.com/v1/categories").then((response) => {
         dispatch({
           type: "SET_CATEGORIES",

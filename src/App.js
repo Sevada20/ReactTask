@@ -6,7 +6,9 @@ import { Route, Routes } from "react-router-dom";
 import { categoriesReducer } from "./reducer/categoriesReducer";
 
 export const MyContext = createContext();
+
 function App() {
+  console.log("render App");
   const [state, dispatch] = useReducer(categoriesReducer, {
     categories: [],
     photoCats: [],
@@ -15,14 +17,10 @@ function App() {
   return (
     <MyContext.Provider value={{ state, dispatch }}>
       <div className="App">
-        <div className="categories">
-          <Categories />
-        </div>
-        <div className="photosCats">
-          <Routes>
-            <Route path="/:id" element={<PhotosCats />} />
-          </Routes>
-        </div>
+        <Categories />
+        <Routes>
+          <Route path="/:id" element={<PhotosCats />} />
+        </Routes>
       </div>
     </MyContext.Provider>
   );
