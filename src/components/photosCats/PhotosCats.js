@@ -23,15 +23,24 @@ const PhotosCats = () => {
       });
   }, [dispatch, limit, params.id]);
 
-  const addPhotoClick = () => {
-    setLimit(limit + 10);
-  };
+  function addPhotosCats() {
+    axios
+      .get(
+        `https://api.thecatapi.com/v1/images/search?limit=10&page=${limit}&category_ids=${params.id}`
+      )
+      .then((response) => {
+        dispatch({
+          type: "ADD_PHOTOS",
+          photosCats: response.data,
+        });
+      });
+  }
   return (
     <div>
       {photosCats.map((photo) => (
         <PhotoCat photo={photo} />
       ))}
-      <button onClick={addPhotoClick}>more</button>
+      <button onClick={addPhotosCats}>more</button>
     </div>
   );
 };
